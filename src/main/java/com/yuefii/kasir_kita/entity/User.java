@@ -18,8 +18,8 @@ import lombok.Setter;
 
 public class User {
 
-  @Id
   private String name;
+  @Id
   private String username;
   private String password;
   private String role;
