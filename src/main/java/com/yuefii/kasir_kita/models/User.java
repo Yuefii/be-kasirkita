@@ -1,4 +1,4 @@
-package com.yuefii.kasir_kita.entity;
+package com.yuefii.kasir_kita.models;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

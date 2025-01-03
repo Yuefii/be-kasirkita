@@ -1,4 +1,4 @@
-package com.yuefii.kasir_kita.models;
+package com.yuefii.kasir_kita.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

@@ -2,10 +2,10 @@ package com.yuefii.kasir_kita.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yuefii.kasir_kita.entity.User;
-import com.yuefii.kasir_kita.models.LoginUserRequest;
-import com.yuefii.kasir_kita.models.TokenResponse;
-import com.yuefii.kasir_kita.models.WebResponse;
+import com.yuefii.kasir_kita.dto.LoginUserRequest;
+import com.yuefii.kasir_kita.dto.TokenResponse;
+import com.yuefii.kasir_kita.dto.WebResponse;
+import com.yuefii.kasir_kita.models.User;
 import com.yuefii.kasir_kita.repositories.UserRepository;
 import com.yuefii.kasir_kita.security.Bcrypt;
 

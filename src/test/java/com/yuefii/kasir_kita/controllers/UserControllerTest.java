@@ -2,8 +2,8 @@ package com.yuefii.kasir_kita.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.yuefii.kasir_kita.models.RegisterUserRequest;
-import com.yuefii.kasir_kita.models.WebResponse;
+import com.yuefii.kasir_kita.dto.RegisterUserRequest;
+import com.yuefii.kasir_kita.dto.WebResponse;
 import com.yuefii.kasir_kita.repositories.UserRepository;
 
 import org.junit.jupiter.api.BeforeEach;

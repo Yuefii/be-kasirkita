@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.yuefii.kasir_kita.models.LoginUserRequest;
-import com.yuefii.kasir_kita.models.TokenResponse;
-import com.yuefii.kasir_kita.models.WebResponse;
+import com.yuefii.kasir_kita.dto.LoginUserRequest;
+import com.yuefii.kasir_kita.dto.TokenResponse;
+import com.yuefii.kasir_kita.dto.WebResponse;
 import com.yuefii.kasir_kita.services.AuthService;
 
 @RestController

@@ -7,9 +7,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import com.yuefii.kasir_kita.entity.User;
-import com.yuefii.kasir_kita.models.LoginUserRequest;
-import com.yuefii.kasir_kita.models.TokenResponse;
+import com.yuefii.kasir_kita.dto.LoginUserRequest;
+import com.yuefii.kasir_kita.dto.TokenResponse;
+import com.yuefii.kasir_kita.models.User;
 import com.yuefii.kasir_kita.repositories.UserRepository;
 import com.yuefii.kasir_kita.security.Bcrypt;
 

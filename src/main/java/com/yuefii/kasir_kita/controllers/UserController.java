@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.yuefii.kasir_kita.models.RegisterUserRequest;
-import com.yuefii.kasir_kita.models.WebResponse;
+import com.yuefii.kasir_kita.dto.RegisterUserRequest;
+import com.yuefii.kasir_kita.dto.WebResponse;
 import com.yuefii.kasir_kita.services.UserService;
 
 @RestController

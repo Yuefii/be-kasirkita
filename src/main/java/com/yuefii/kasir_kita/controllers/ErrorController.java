@@ -5,7 +5,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.server.ResponseStatusException;
-import com.yuefii.kasir_kita.models.WebResponse;
+
+import com.yuefii.kasir_kita.dto.WebResponse;
 
 import jakarta.validation.ConstraintViolationException;
 
