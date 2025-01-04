@@ -23,13 +23,11 @@ public class UserArgsResolver implements HandlerMethodArgumentResolver {
   private UserRepository userRepository;
 
   @Override
-  @SuppressWarnings("null")
   public boolean supportsParameter(MethodParameter parameter) {
     return User.class.equals(parameter.getParameterType());
   }
 
   @Override
-  @SuppressWarnings("null")
   public Object resolveArgument(MethodParameter parameter, @Nullable ModelAndViewContainer mavContainer,
       NativeWebRequest webRequest, @Nullable WebDataBinderFactory binderFactory) throws Exception {
 
