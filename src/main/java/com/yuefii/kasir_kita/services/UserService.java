@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.yuefii.kasir_kita.dto.RegisterUserRequest;
+import com.yuefii.kasir_kita.dto.UserResponse;
 import com.yuefii.kasir_kita.models.User;
 import com.yuefii.kasir_kita.repositories.UserRepository;
 import com.yuefii.kasir_kita.security.Bcrypt;
@@ -36,5 +37,13 @@ public class UserService {
     user.setRole("cashier");
 
     userRepository.save(user);
+  }
+
+  public UserResponse get(User user) {
+    return UserResponse.builder()
+        .name(user.getName())
+        .username(user.getUsername())
+        .role(user.getRole())
+        .build();
   }
 }
