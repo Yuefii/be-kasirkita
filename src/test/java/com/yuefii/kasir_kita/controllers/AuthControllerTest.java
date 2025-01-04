@@ -119,4 +119,50 @@ public class AuthControllerTest {
           assertEquals(userDb.getTokenExpiredAt(), response.getData().getExpiredAt());
         });
   }
+
+  @Test
+  void logoutFailed() throws Exception {
+    mockMvc.perform(
+        delete("/api/auth/logout")
+            .accept(MediaType.APPLICATION_JSON))
+        .andExpectAll(
+            status().isUnauthorized())
+        .andDo(result -> {
+          WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(),
+              new TypeReference<>() {
+              });
+          assertNotNull(response.getErrors());
+        });
+  }
+
+  @Test
+  void logoutSuccess() throws Exception {
+    User user = new User();
+    user.setName("Jhon Doe");
+    user.setUsername("jhondoe");
+    user.setPassword(Bcrypt.hashpw("rahasia", Bcrypt.gensalt()));
+    user.setToken("test");
+    user.setTokenExpiredAt(System.currentTimeMillis() + 10000000L);
+    userRepository.save(user);
+
+    mockMvc.perform(
+        delete("/api/auth/logout")
+            .accept(MediaType.APPLICATION_JSON)
+            .header("Authorization", "test"))
+        .andExpectAll(
+            status().isOk())
+        .andDo(result -> {
+          WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(),
+              new TypeReference<>() {
+              });
+          assertNull(response.getErrors());
+          assertEquals("successfull", response.getData());
+
+          User userDb = userRepository.findById("jhondoe").orElse(null);
+          assertNotNull(userDb);
+          assertNull(userDb.getTokenExpiredAt());
+          assertNull(userDb.getToken());
+        });
+  }
+
 }
