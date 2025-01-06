@@ -33,14 +33,14 @@ public class StoreControllerTest {
   private UserRepository userRepository;
 
   @Autowired
-  private StoreRepository contactRepository;
+  private StoreRepository storeRepository;
 
   @Autowired
   private ObjectMapper objectMapper;
 
   @BeforeEach
   void setUp() {
-    contactRepository.deleteAll();
+    storeRepository.deleteAll();
     userRepository.deleteAll();
 
     User user = new User();
