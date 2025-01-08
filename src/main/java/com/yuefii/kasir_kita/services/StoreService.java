@@ -3,7 +3,9 @@ package com.yuefii.kasir_kita.services;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.yuefii.kasir_kita.dto.CreateStoreRequest;
 import com.yuefii.kasir_kita.dto.StoreResponse;
@@ -11,7 +13,7 @@ import com.yuefii.kasir_kita.models.Store;
 import com.yuefii.kasir_kita.models.User;
 import com.yuefii.kasir_kita.repositories.StoreRepository;
 
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class StoreService {
@@ -24,6 +26,7 @@ public class StoreService {
 
   private StoreResponse toResponse(Store store) {
     return StoreResponse.builder()
+        .storeID(store.getStoreID())
         .storeName(store.getStoreName())
         .storeAddress(store.getStoreAddress())
         .storePhone(store.getStorePhone())
@@ -45,6 +48,14 @@ public class StoreService {
     store.setUser(user);
 
     storeRepository.save(store);
+
+    return toResponse(store);
+  }
+
+  @Transactional(readOnly = true)
+  public StoreResponse get(User user) {
+    Store store = storeRepository.findFirstByUserUsername(user.getUsername())
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "store not found"));
 
     return toResponse(store);
   }

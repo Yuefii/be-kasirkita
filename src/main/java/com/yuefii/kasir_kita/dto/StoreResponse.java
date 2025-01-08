@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 @Builder
 public class StoreResponse {
 
+  private String storeID;
+
   private String storeName;
 
   private String storeAddress;
