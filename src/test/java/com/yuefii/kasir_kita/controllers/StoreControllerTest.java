@@ -252,4 +252,50 @@ public class StoreControllerTest {
         });
   }
 
+  @Test
+  void deleteContactNotFound() throws Exception {
+    mockMvc.perform(
+        delete("/api/store")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "test"))
+        .andExpectAll(
+            status().isNotFound())
+        .andDo(result -> {
+          WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(),
+              new TypeReference<WebResponse<String>>() {
+              });
+          assertNotNull(response.getErrors());
+        });
+  }
+
+  @Test
+  void deleteContactSuccess() throws Exception {
+    User user = userRepository.findById("test").orElseThrow();
+
+    Store store = new Store();
+    store.setStoreID(UUID.randomUUID().toString());
+    store.setUser(user);
+    store.setStoreName("Test Store");
+    store.setStoreAddress("Jakarta");
+    store.setStoreEmail("test@example.com");
+    store.setStorePhone("08888121212");
+    storeRepository.save(store);
+
+    mockMvc.perform(
+        delete("/api/store")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .header("Authorization", "test"))
+        .andExpectAll(
+            status().isOk())
+        .andDo(result -> {
+          WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(),
+              new TypeReference<>() {
+              });
+          assertNull(response.getErrors());
+          assertEquals("successfull", response.getData());
+        });
+  }
+
 }

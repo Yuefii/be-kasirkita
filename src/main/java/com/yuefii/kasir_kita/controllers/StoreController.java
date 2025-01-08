@@ -2,6 +2,7 @@ package com.yuefii.kasir_kita.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +38,12 @@ public class StoreController {
   public WebResponse<StoreResponse> update(User user, @RequestBody UpdateStoreRequest request) {
     StoreResponse storeResponse = storeService.update(user, request);
     return WebResponse.<StoreResponse>builder().data(storeResponse).build();
+  }
+
+  @DeleteMapping(path = "/api/store", produces = MediaType.APPLICATION_JSON_VALUE)
+  public WebResponse<String> delete(User user) {
+    storeService.delete(user);
+    return WebResponse.<String>builder().data("successfull").build();
   }
 
 }

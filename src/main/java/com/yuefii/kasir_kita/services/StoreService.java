@@ -94,4 +94,13 @@ public class StoreService {
 
     return toResponse(store);
   }
+
+  @Transactional
+  public void delete(User user) {
+    Store store = storeRepository.findFirstByUserUsername(user.getUsername())
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "store not found"));
+
+    storeRepository.delete(store);
+  }
+
 }
