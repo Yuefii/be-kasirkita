@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.yuefii.kasir_kita.dto.ChangePasswordRequest;
 import com.yuefii.kasir_kita.dto.RegisterUserRequest;
 import com.yuefii.kasir_kita.dto.UpdateUserRequest;
 import com.yuefii.kasir_kita.dto.UserResponse;
@@ -42,6 +43,12 @@ public class UserController {
   public WebResponse<UserResponse> update(User user, @RequestBody UpdateUserRequest request) {
     UserResponse userResponse = userService.update(user, request);
     return WebResponse.<UserResponse>builder().data(userResponse).build();
+  }
+
+  @PatchMapping(path = "/api/users/change-password", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+  public WebResponse<String> changePassword(User user, @RequestBody ChangePasswordRequest request) {
+    userService.changePassword(user, request);
+    return WebResponse.<String>builder().data("successfull").build();
   }
 
   @DeleteMapping(path = "/api/auth/logout", produces = MediaType.APPLICATION_JSON_VALUE)

@@ -2,6 +2,7 @@ package com.yuefii.kasir_kita.controllers;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.yuefii.kasir_kita.dto.ChangePasswordRequest;
 import com.yuefii.kasir_kita.dto.RegisterUserRequest;
 import com.yuefii.kasir_kita.dto.UpdateUserRequest;
 import com.yuefii.kasir_kita.dto.UserResponse;
@@ -260,6 +261,39 @@ public class UserControllerTest {
 
                     User userDb = userRepository.findById("jhondoe").orElse(null);
                     assertNotNull(userDb);
+                });
+    }
+
+    @Test
+    void changePasswordSuccess() throws Exception {
+        User user = new User();
+        user.setName("Jhon Doe");
+        user.setUsername("jhondoe");
+        user.setPassword(Bcrypt.hashpw("rahasia", Bcrypt.gensalt()));
+        user.setRole("cashier");
+        user.setToken("test");
+        user.setTokenExpiredAt(System.currentTimeMillis() + 100000000000L);
+        userRepository.save(user);
+
+        ChangePasswordRequest request = new ChangePasswordRequest();
+        request.setOldPassword("rahasia");
+        request.setNewPassword("rahasia2323");
+        request.setConfirmPassword("rahasia2323");
+
+        mockMvc.perform(
+                patch("/api/users/change-password")
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request))
+                        .header("Authorization", "test"))
+                .andExpectAll(
+                        status().isOk())
+                .andDo(result -> {
+                        WebResponse<String> response = objectMapper.readValue(
+                                        result.getResponse().getContentAsString(),
+                                        new TypeReference<>() {
+                                        });
+                    assertEquals("successfull", response.getData());
                 });
     }
 

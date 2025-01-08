@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.yuefii.kasir_kita.dto.ChangePasswordRequest;
 import com.yuefii.kasir_kita.dto.RegisterUserRequest;
 import com.yuefii.kasir_kita.dto.UpdateUserRequest;
 import com.yuefii.kasir_kita.dto.UserResponse;
@@ -72,5 +73,22 @@ public class UserService {
         .username(user.getUsername())
         .role(user.getRole())
         .build();
+  }
+
+  @Transactional
+  public void changePassword(User user, ChangePasswordRequest request) {
+    validationService.validate(request);
+
+    if (!Bcrypt.checkpw(request.getOldPassword(), user.getPassword())) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password lama yang Anda masukkan salah.");
+    }
+
+    if (!request.getNewPassword().equals(request.getConfirmPassword())) {
+      throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Password baru dan konfirmasi password tidak cocok.");
+    }
+
+    user.setPassword(Bcrypt.hashpw(request.getNewPassword(), Bcrypt.gensalt()));
+
+    userRepository.save(user);
   }
 }
