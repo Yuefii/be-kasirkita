@@ -57,7 +57,7 @@ public class StoreControllerTest {
   }
 
   @Test
-  void createContactBadRequest() throws Exception {
+  void createStoreBadRequest() throws Exception {
     CreateStoreRequest request = new CreateStoreRequest();
     request.setStoreName("");
     request.setStoreEmail("salah");
@@ -103,6 +103,41 @@ public class StoreControllerTest {
           assertEquals("Tangerang", response.getData().getStoreAddress());
           assertEquals("test@example.com", response.getData().getStoreEmail());
           assertEquals("42342342344", response.getData().getStorePhone());
+        });
+  }
+
+  @Test
+  void createStoreAlreadyHasStore() throws Exception {
+    User user = userRepository.findById("test").orElseThrow();
+
+    Store store = new Store();
+    store.setStoreID(UUID.randomUUID().toString());
+    store.setUser(user);
+    store.setStoreName("Test Store");
+    store.setStoreAddress("Jakarta");
+    store.setStoreEmail("test@example.com");
+    store.setStorePhone("08888121212");
+    storeRepository.save(store);
+
+    CreateStoreRequest request = new CreateStoreRequest();
+    request.setStoreName("Test Store");
+    request.setStoreAddress("Tangerang");
+    request.setStoreEmail("test@example.com");
+    request.setStorePhone("42342342344");
+
+    mockMvc.perform(
+        post("/api/store")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request))
+            .header("Authorization", "test"))
+        .andExpectAll(
+            status().isBadRequest())
+        .andDo(result -> {
+          WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(),
+              new TypeReference<WebResponse<String>>() {
+              });
+          assertNotNull(response.getErrors());
         });
   }
 

@@ -39,6 +39,11 @@ public class StoreService {
 
     validationService.validate(request);
 
+    storeRepository.findFirstByUserUsername(user.getUsername())
+        .ifPresent(_ -> {
+          throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "store already exists");
+        });
+
     Store store = new Store();
     store.setStoreID(UUID.randomUUID().toString());
     store.setStoreName(request.getStoreName());
