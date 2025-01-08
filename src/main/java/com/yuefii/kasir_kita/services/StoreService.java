@@ -1,5 +1,6 @@
 package com.yuefii.kasir_kita.services;
 
+import java.util.Objects;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.yuefii.kasir_kita.dto.CreateStoreRequest;
 import com.yuefii.kasir_kita.dto.StoreResponse;
+import com.yuefii.kasir_kita.dto.UpdateStoreRequest;
 import com.yuefii.kasir_kita.models.Store;
 import com.yuefii.kasir_kita.models.User;
 import com.yuefii.kasir_kita.repositories.StoreRepository;
@@ -61,6 +63,34 @@ public class StoreService {
   public StoreResponse get(User user) {
     Store store = storeRepository.findFirstByUserUsername(user.getUsername())
         .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "store not found"));
+
+    return toResponse(store);
+  }
+
+  @Transactional
+  public StoreResponse update(User user, UpdateStoreRequest request) {
+    validationService.validate(request);
+
+    Store store = storeRepository.findFirstByUserUsername(user.getUsername())
+        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "store not found"));
+
+    if (Objects.nonNull(request.getStoreName())) {
+      store.setStoreName(request.getStoreName());
+    }
+
+    if (Objects.nonNull(request.getStoreAddress())) {
+      store.setStoreAddress(request.getStoreAddress());
+    }
+
+    if (Objects.nonNull(request.getStoreEmail())) {
+      store.setStoreEmail(request.getStoreEmail());
+    }
+
+    if (Objects.nonNull(request.getStorePhone())) {
+      store.setStorePhone(request.getStorePhone());
+    }
+
+    storeRepository.save(store);
 
     return toResponse(store);
   }

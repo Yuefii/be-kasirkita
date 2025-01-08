@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yuefii.kasir_kita.dto.CreateStoreRequest;
 import com.yuefii.kasir_kita.dto.StoreResponse;
+import com.yuefii.kasir_kita.dto.UpdateStoreRequest;
 import com.yuefii.kasir_kita.dto.WebResponse;
 import com.yuefii.kasir_kita.models.Store;
 import com.yuefii.kasir_kita.models.User;
@@ -191,4 +192,64 @@ public class StoreControllerTest {
           assertEquals(store.getStorePhone(), response.getData().getStorePhone());
         });
   }
+
+  @Test
+  void updateStoreNotFound() throws Exception {
+    UpdateStoreRequest request = new UpdateStoreRequest();
+
+    mockMvc.perform(
+        patch("/api/store")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request))
+            .header("Authorization", "test"))
+        .andExpectAll(
+            status().isNotFound())
+        .andDo(result -> {
+          WebResponse<String> response = objectMapper.readValue(result.getResponse().getContentAsString(),
+              new TypeReference<WebResponse<String>>() {
+              });
+          assertNotNull(response.getErrors());
+        });
+  }
+
+  @Test
+  void updateStoreSuccess() throws Exception {
+    User user = userRepository.findById("test").orElseThrow();
+
+    Store store = new Store();
+    store.setStoreID(UUID.randomUUID().toString());
+    store.setUser(user);
+    store.setStoreName("Test Store");
+    store.setStoreAddress("Jakarta");
+    store.setStoreEmail("test@example.com");
+    store.setStorePhone("08888121212");
+    storeRepository.save(store);
+
+    UpdateStoreRequest request = new UpdateStoreRequest();
+    request.setStoreName("Test Store Update");
+    request.setStoreAddress("Tangerang");
+    request.setStoreEmail("update@example.com");
+    request.setStorePhone("0888813131313");
+
+    mockMvc.perform(
+        patch("/api/store")
+            .accept(MediaType.APPLICATION_JSON)
+            .contentType(MediaType.APPLICATION_JSON)
+            .content(objectMapper.writeValueAsString(request))
+            .header("Authorization", "test"))
+        .andExpectAll(
+            status().isOk())
+        .andDo(result -> {
+          WebResponse<StoreResponse> response = objectMapper.readValue(result.getResponse().getContentAsString(),
+              new TypeReference<>() {
+              });
+          assertNull(response.getErrors());
+          assertEquals("Test Store Update", response.getData().getStoreName());
+          assertEquals("Tangerang", response.getData().getStoreAddress());
+          assertEquals("update@example.com", response.getData().getStoreEmail());
+          assertEquals("0888813131313", response.getData().getStorePhone());
+        });
+  }
+
 }
