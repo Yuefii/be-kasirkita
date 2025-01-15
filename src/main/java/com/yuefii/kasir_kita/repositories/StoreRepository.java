@@ -12,4 +12,6 @@ public interface StoreRepository extends JpaRepository<Store, String> {
 
   Optional<Store> findFirstByUserUsername(String username);
 
+  Optional<Store> findFirstByUserUsernameAndStoreID(String username, String storeID);
+
 }
